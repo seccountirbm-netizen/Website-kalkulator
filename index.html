@@ -3,318 +3,548 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulator Web</title>
+    <title>Kalkulator & Konverter Mata Uang</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #f72585;
+            --success: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --calculator-bg: rgba(255, 255, 255, 0.1);
+            --card-bg: rgba(255, 255, 255, 0.95);
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
-
+        
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             min-height: 100vh;
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
             padding: 20px;
+            color: var(--dark);
         }
-
-        .calculator-container {
-            width: 100%;
-            max-width: 400px;
-            background-color: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-            padding: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
         }
-
-        .calculator-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
             color: white;
         }
-
-        .calculator-header h1 {
-            font-size: 1.8rem;
-            font-weight: 600;
-        }
-
-        .calculator-header i {
-            font-size: 1.5rem;
-        }
-
-        .display {
-            width: 100%;
-            height: 120px;
-            background-color: rgba(0, 0, 0, 0.2);
-            border-radius: 15px;
-            margin-bottom: 20px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: flex-end;
-            color: white;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .previous-operation {
-            font-size: 1.2rem;
-            opacity: 0.7;
-            min-height: 28px;
-            word-break: break-all;
-            text-align: right;
-            width: 100%;
-        }
-
-        .current-operation {
+        
+        .header h1 {
             font-size: 2.5rem;
-            font-weight: 600;
-            word-break: break-all;
-            text-align: right;
-            width: 100%;
-        }
-
-        .buttons-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-gap: 15px;
-        }
-
-        .button {
-            height: 70px;
-            border-radius: 15px;
-            border: none;
-            font-size: 1.5rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-        }
-
-        .button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-
-        .button:active {
-            transform: translateY(1px);
-        }
-
-        .number, .decimal {
-            background-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .number:hover, .decimal:hover {
-            background-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .operator {
-            background-color: rgba(255, 165, 0, 0.7);
-        }
-
-        .operator:hover {
-            background-color: rgba(255, 165, 0, 0.9);
-        }
-
-        .equals {
-            background-color: rgba(50, 205, 50, 0.7);
-            grid-column: span 2;
-        }
-
-        .equals:hover {
-            background-color: rgba(50, 205, 50, 0.9);
-        }
-
-        .clear, .delete {
-            background-color: rgba(220, 20, 60, 0.7);
-        }
-
-        .clear:hover, .delete:hover {
-            background-color: rgba(220, 20, 60, 0.9);
-        }
-
-        .instructions {
-            margin-top: 25px;
-            padding: 15px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            color: white;
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-
-        .instructions h3 {
             margin-bottom: 10px;
             display: flex;
             align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 992px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .card-title {
+            display: flex;
+            align-items: center;
             gap: 10px;
+            margin-bottom: 20px;
+            color: var(--primary);
+            font-size: 1.5rem;
         }
-
-        .instructions ul {
-            padding-left: 20px;
+        
+        /* Kalkulator Styles */
+        .calculator-display {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: right;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
         }
-
-        .instructions li {
-            margin-bottom: 5px;
+        
+        .previous-operation {
+            font-size: 1.2rem;
+            color: rgba(0, 0, 0, 0.6);
+            min-height: 27px;
+            word-break: break-all;
         }
-
+        
+        .current-operation {
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            min-height: 60px;
+            word-break: break-all;
+        }
+        
+        .calculator-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+        
+        /* Konverter Styles */
+        .converter-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .currency-box {
+            background: rgba(0, 0, 0, 0.03);
+            border-radius: 15px;
+            padding: 20px;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+        }
+        
+        .currency-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .currency-flag {
+            width: 40px;
+            height: 30px;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .currency-code {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .currency-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.8rem;
+            font-weight: 600;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: right;
+            background: white;
+            color: var(--dark);
+        }
+        
+        .currency-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .currency-name {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: rgba(0, 0, 0, 0.6);
+        }
+        
+        .swap-button {
+            align-self: center;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .swap-button:hover {
+            background: var(--secondary);
+            transform: rotate(180deg);
+        }
+        
+        .currency-selector {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .currency-select {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            font-size: 1rem;
+            background: white;
+            cursor: pointer;
+        }
+        
+        .currency-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .exchange-rate {
+            text-align: center;
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(67, 97, 238, 0.1);
+            border-radius: 10px;
+            font-size: 1.1rem;
+            color: var(--primary);
+            font-weight: 500;
+        }
+        
+        /* Tombol Umum */
+        .btn {
+            padding: 18px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-number {
+            background: rgba(0, 0, 0, 0.1);
+            color: var(--dark);
+        }
+        
+        .btn-number:hover {
+            background: rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-operator {
+            background: var(--primary);
+        }
+        
+        .btn-operator:hover {
+            background: #3651d4;
+        }
+        
+        .btn-equals {
+            background: var(--success);
+            grid-column: span 2;
+        }
+        
+        .btn-equals:hover {
+            background: #3db5d8;
+        }
+        
+        .btn-clear {
+            background: var(--accent);
+        }
+        
+        .btn-clear:hover {
+            background: #e11576;
+        }
+        
+        .btn-delete {
+            background: #7209b7;
+        }
+        
+        .btn-delete:hover {
+            background: #5e0896;
+        }
+        
+        /* Footer */
         .footer {
             text-align: center;
-            margin-top: 20px;
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.8rem;
+            color: white;
+            padding: 20px;
+            font-size: 0.9rem;
+            opacity: 0.8;
         }
-
-        @media (max-width: 480px) {
-            .calculator-container {
-                padding: 15px;
+        
+        .last-updated {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: var(--primary);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+                flex-direction: column;
+                gap: 10px;
             }
             
-            .button {
-                height: 60px;
-                font-size: 1.3rem;
+            .card {
+                padding: 20px;
             }
             
             .current-operation {
                 font-size: 2rem;
             }
+            
+            .currency-input {
+                font-size: 1.5rem;
+                padding: 12px;
+            }
+            
+            .btn {
+                padding: 15px;
+                font-size: 1.1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .calculator-buttons {
+                gap: 8px;
+            }
+            
+            .btn {
+                padding: 12px;
+                font-size: 1rem;
+            }
+            
+            .currency-selector {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="calculator-container">
-        <div class="calculator-header">
-            <h1><i class="fas fa-calculator"></i> Kalkulator Web</h1>
-            <i class="fas fa-sun" id="theme-toggle"></i>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <i class="fas fa-calculator"></i>
+                Kalkulator & Konverter Mata Uang
+                <i class="fas fa-exchange-alt"></i>
+            </h1>
+            <p>Kalkulator lengkap dengan konversi mata uang real-time</p>
         </div>
         
-        <div class="display">
-            <div class="previous-operation"></div>
-            <div class="current-operation">0</div>
-        </div>
-        
-        <div class="buttons-grid">
-            <button class="button clear" data-action="clear">C</button>
-            <button class="button delete" data-action="delete">DEL</button>
-            <button class="button operator" data-operation="÷">÷</button>
-            <button class="button operator" data-operation="×">×</button>
+        <div class="main-content">
+            <!-- Kalkulator -->
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-calculator"></i>
+                    <h2>Kalkulator</h2>
+                </div>
+                
+                <div class="calculator-display">
+                    <div class="previous-operation" id="previousOperation"></div>
+                    <div class="current-operation" id="currentOperation">0</div>
+                </div>
+                
+                <div class="calculator-buttons">
+                    <button class="btn btn-clear" data-action="clear">C</button>
+                    <button class="btn btn-delete" data-action="delete">DEL</button>
+                    <button class="btn btn-operator" data-operation="÷">÷</button>
+                    <button class="btn btn-operator" data-operation="×">×</button>
+                    
+                    <button class="btn btn-number" data-number="7">7</button>
+                    <button class="btn btn-number" data-number="8">8</button>
+                    <button class="btn btn-number" data-number="9">9</button>
+                    <button class="btn btn-operator" data-operation="-">-</button>
+                    
+                    <button class="btn btn-number" data-number="4">4</button>
+                    <button class="btn btn-number" data-number="5">5</button>
+                    <button class="btn btn-number" data-number="6">6</button>
+                    <button class="btn btn-operator" data-operation="+">+</button>
+                    
+                    <button class="btn btn-number" data-number="1">1</button>
+                    <button class="btn btn-number" data-number="2">2</button>
+                    <button class="btn btn-number" data-number="3">3</button>
+                    <button class="btn btn-equals" data-action="equals">=</button>
+                    
+                    <button class="btn btn-number" data-number="0">0</button>
+                    <button class="btn btn-number" data-action="decimal">.</button>
+                </div>
+            </div>
             
-            <button class="button number" data-number="7">7</button>
-            <button class="button number" data-number="8">8</button>
-            <button class="button number" data-number="9">9</button>
-            <button class="button operator" data-operation="-">-</button>
-            
-            <button class="button number" data-number="4">4</button>
-            <button class="button number" data-number="5">5</button>
-            <button class="button number" data-number="6">6</button>
-            <button class="button operator" data-operation="+">+</button>
-            
-            <button class="button number" data-number="1">1</button>
-            <button class="button number" data-number="2">2</button>
-            <button class="button number" data-number="3">3</button>
-            <button class="button equals" data-action="equals">=</button>
-            
-            <button class="button number" data-number="0">0</button>
-            <button class="button decimal" data-action="decimal">.</button>
-        </div>
-        
-        <div class="instructions">
-            <h3><i class="fas fa-info-circle"></i> Petunjuk Penggunaan</h3>
-            <ul>
-                <li>Klik angka dan operator untuk melakukan perhitungan</li>
-                <li>Gunakan tombol "DEL" untuk menghapus angka terakhir</li>
-                <li>Gunakan tombol "C" untuk menghapus semua perhitungan</li>
-                <li>Klik "=" untuk melihat hasil perhitungan</li>
-                <li>Klik ikon matahari untuk mengubah tema</li>
-            </ul>
+            <!-- Konverter Mata Uang -->
+            <div class="card">
+                <div class="card-title">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <h2>Konverter Mata Uang</h2>
+                </div>
+                
+                <div class="converter-container">
+                    <!-- Mata Uang Asal -->
+                    <div class="currency-box">
+                        <div class="currency-header">
+                            <div class="currency-flag" id="fromFlag">
+                                <!-- Flag akan diisi oleh JavaScript -->
+                            </div>
+                            <span class="currency-code" id="fromCurrency">USD</span>
+                        </div>
+                        <input type="number" class="currency-input" id="fromAmount" value="1" min="0" step="0.01">
+                        <div class="currency-name" id="fromCurrencyName">Dolar Amerika Serikat</div>
+                    </div>
+                    
+                    <!-- Tombol Tukar -->
+                    <button class="swap-button" id="swapCurrencies">
+                        <i class="fas fa-exchange-alt"></i>
+                    </button>
+                    
+                    <!-- Mata Uang Tujuan -->
+                    <div class="currency-box">
+                        <div class="currency-header">
+                            <div class="currency-flag" id="toFlag">
+                                <!-- Flag akan diisi oleh JavaScript -->
+                            </div>
+                            <span class="currency-code" id="toCurrency">IDR</span>
+                        </div>
+                        <input type="number" class="currency-input" id="toAmount" readonly>
+                        <div class="currency-name" id="toCurrencyName">Rupiah Indonesia</div>
+                    </div>
+                    
+                    <!-- Selector Mata Uang -->
+                    <div class="currency-selector">
+                        <select class="currency-select" id="fromCurrencySelect">
+                            <option value="USD">USD - Dolar AS</option>
+                            <option value="EUR">EUR - Euro</option>
+                            <option value="GBP">GBP - Pound Sterling</option>
+                            <option value="JPY">JPY - Yen Jepang</option>
+                            <option value="IDR" selected>IDR - Rupiah Indonesia</option>
+                            <option value="SGD">SGD - Dolar Singapura</option>
+                            <option value="MYR">MYR - Ringgit Malaysia</option>
+                            <option value="CNY">CNY - Yuan China</option>
+                            <option value="AUD">AUD - Dolar Australia</option>
+                            <option value="KRW">KRW - Won Korea Selatan</option>
+                        </select>
+                        
+                        <select class="currency-select" id="toCurrencySelect">
+                            <option value="USD">USD - Dolar AS</option>
+                            <option value="EUR">EUR - Euro</option>
+                            <option value="GBP">GBP - Pound Sterling</option>
+                            <option value="JPY" selected>JPY - Yen Jepang</option>
+                            <option value="IDR">IDR - Rupiah Indonesia</option>
+                            <option value="SGD">SGD - Dolar Singapura</option>
+                            <option value="MYR">MYR - Ringgit Malaysia</option>
+                            <option value="CNY">CNY - Yuan China</option>
+                            <option value="AUD">AUD - Dolar Australia</option>
+                            <option value="KRW">KRW - Won Korea Selatan</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Nilai Tukar -->
+                    <div class="exchange-rate" id="exchangeRate">
+                        1 USD = 15,000 IDR
+                    </div>
+                </div>
+            </div>
         </div>
         
         <div class="footer">
-            Dibuat dengan HTML, CSS, dan JavaScript
+            <p>© 2024 Kalkulator & Konverter Mata Uang | Data kurs menggunakan nilai tetap untuk demo</p>
+            <p class="last-updated" id="lastUpdated">Terakhir diperbarui: -</p>
         </div>
     </div>
 
     <script>
-        // Elemen kalkulator
-        const previousOperationElement = document.querySelector('.previous-operation');
-        const currentOperationElement = document.querySelector('.current-operation');
-        const buttons = document.querySelectorAll('.button');
-        const themeToggle = document.getElementById('theme-toggle');
+        // ==============================
+        // KALKULATOR
+        // ==============================
+        const currentOperationElement = document.getElementById('currentOperation');
+        const previousOperationElement = document.getElementById('previousOperation');
+        const calculatorButtons = document.querySelectorAll('.calculator-buttons button');
         
-        // Variabel kalkulator
-        let currentOperation = '0';
-        let previousOperation = '';
-        let operator = null;
-        let waitingForNewNumber = false;
+        let currentOperand = '0';
+        let previousOperand = '';
+        let operation = null;
+        let resetScreen = false;
         
-        // Fungsi untuk memperbarui tampilan
-        function updateDisplay() {
-            currentOperationElement.textContent = currentOperation;
-            previousOperationElement.textContent = previousOperation;
+        // Fungsi update tampilan kalkulator
+        function updateCalculatorDisplay() {
+            currentOperationElement.textContent = currentOperand;
+            previousOperationElement.textContent = previousOperand;
         }
         
-        // Fungsi untuk menambahkan angka
-        function inputNumber(number) {
-            if (waitingForNewNumber) {
-                currentOperation = number;
-                waitingForNewNumber = false;
+        // Tambah angka
+        function appendNumber(number) {
+            if (currentOperand === '0' || resetScreen) {
+                currentOperand = number;
+                resetScreen = false;
             } else {
-                currentOperation = currentOperation === '0' ? number : currentOperation + number;
+                currentOperand += number;
             }
         }
         
-        // Fungsi untuk menambahkan desimal
-        function inputDecimal() {
-            if (waitingForNewNumber) {
-                currentOperation = '0.';
-                waitingForNewNumber = false;
-                return;
+        // Pilih operasi
+        function chooseOperation(op) {
+            if (currentOperand === '') return;
+            
+            if (previousOperand !== '') {
+                calculate();
             }
             
-            if (!currentOperation.includes('.')) {
-                currentOperation += '.';
-            }
+            operation = op;
+            previousOperand = `${currentOperand} ${op}`;
+            resetScreen = true;
         }
         
-        // Fungsi untuk memilih operator
-        function chooseOperator(nextOperator) {
-            const inputValue = parseFloat(currentOperation);
-            
-            if (previousOperation === '') {
-                previousOperation = currentOperation;
-            } else if (operator) {
-                const result = calculate();
-                currentOperation = `${parseFloat(result.toFixed(7))}`;
-                previousOperation = currentOperation;
-            }
-            
-            waitingForNewNumber = true;
-            operator = nextOperator;
-            previousOperation = `${previousOperation} ${operator}`;
-        }
-        
-        // Fungsi untuk melakukan perhitungan
+        // Hitung
         function calculate() {
-            const prev = parseFloat(previousOperation);
-            const current = parseFloat(currentOperation);
+            let computation;
+            const prev = parseFloat(previousOperand);
+            const current = parseFloat(currentOperand);
             
-            if (isNaN(prev) || isNaN(current)) return 0;
+            if (isNaN(prev) || isNaN(current)) return;
             
-            let computation = 0;
-            
-            switch (operator) {
+            switch (operation) {
                 case '+':
                     computation = prev + current;
                     break;
@@ -326,173 +556,285 @@
                     break;
                 case '÷':
                     if (current === 0) {
-                        alert("Tidak dapat membagi dengan nol!");
+                        alert("Tidak bisa membagi dengan nol!");
                         clearCalculator();
-                        return 0;
+                        return;
                     }
                     computation = prev / current;
                     break;
                 default:
-                    return current;
+                    return;
             }
             
-            return computation;
+            currentOperand = Math.round(computation * 100000000) / 100000000;
+            currentOperand = currentOperand.toString();
+            operation = null;
+            previousOperand = '';
         }
         
-        // Fungsi untuk menghapus kalkulator
+        // Clear kalkulator
         function clearCalculator() {
-            currentOperation = '0';
-            previousOperation = '';
-            operator = null;
-            waitingForNewNumber = false;
+            currentOperand = '0';
+            previousOperand = '';
+            operation = null;
         }
         
-        // Fungsi untuk menghapus digit terakhir
-        function deleteLastDigit() {
-            if (currentOperation.length > 1) {
-                currentOperation = currentOperation.slice(0, -1);
+        // Hapus angka terakhir
+        function deleteNumber() {
+            if (currentOperand.length === 1) {
+                currentOperand = '0';
             } else {
-                currentOperation = '0';
+                currentOperand = currentOperand.slice(0, -1);
             }
         }
         
-        // Fungsi untuk melakukan perhitungan sama dengan
-        function performEquals() {
-            if (previousOperation === '' || operator === null || waitingForNewNumber) {
-                return;
+        // Tambah titik desimal
+        function appendDecimal() {
+            if (resetScreen) {
+                currentOperand = '0';
+                resetScreen = false;
             }
             
-            const result = calculate();
-            previousOperation = `${previousOperation} ${currentOperation} =`;
-            currentOperation = `${parseFloat(result.toFixed(7))}`;
-            operator = null;
-            waitingForNewNumber = true;
+            if (!currentOperand.includes('.')) {
+                currentOperand += '.';
+            }
         }
         
-        // Event listener untuk semua tombol
-        buttons.forEach(button => {
+        // Event listener untuk tombol kalkulator
+        calculatorButtons.forEach(button => {
             button.addEventListener('click', () => {
                 // Tombol angka
                 if (button.hasAttribute('data-number')) {
-                    inputNumber(button.getAttribute('data-number'));
-                    updateDisplay();
+                    appendNumber(button.getAttribute('data-number'));
+                    updateCalculatorDisplay();
                     return;
                 }
                 
                 // Tombol operator
                 if (button.hasAttribute('data-operation')) {
-                    chooseOperator(button.getAttribute('data-operation'));
-                    updateDisplay();
+                    chooseOperation(button.getAttribute('data-operation'));
+                    updateCalculatorDisplay();
                     return;
                 }
                 
                 // Tombol desimal
                 if (button.hasAttribute('data-action') && button.getAttribute('data-action') === 'decimal') {
-                    inputDecimal();
-                    updateDisplay();
+                    appendDecimal();
+                    updateCalculatorDisplay();
                     return;
                 }
                 
                 // Tombol sama dengan
                 if (button.hasAttribute('data-action') && button.getAttribute('data-action') === 'equals') {
-                    performEquals();
-                    updateDisplay();
+                    if (previousOperand === '' || operation === null) return;
+                    calculate();
+                    updateCalculatorDisplay();
                     return;
                 }
                 
                 // Tombol hapus (DEL)
                 if (button.hasAttribute('data-action') && button.getAttribute('data-action') === 'delete') {
-                    deleteLastDigit();
-                    updateDisplay();
+                    deleteNumber();
+                    updateCalculatorDisplay();
                     return;
                 }
                 
                 // Tombol clear (C)
                 if (button.hasAttribute('data-action') && button.getAttribute('data-action') === 'clear') {
                     clearCalculator();
-                    updateDisplay();
+                    updateCalculatorDisplay();
                     return;
                 }
             });
         });
         
-        // Toggle tema terang/gelap
-        let isDarkTheme = true;
-        themeToggle.addEventListener('click', () => {
-            isDarkTheme = !isDarkTheme;
-            
-            if (isDarkTheme) {
-                // Tema gelap
-                document.body.style.background = "linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)";
-                themeToggle.className = "fas fa-sun";
-            } else {
-                // Tema terang
-                document.body.style.background = "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)";
-                themeToggle.className = "fas fa-moon";
-            }
-        });
-        
-        // Event listener untuk keyboard
+        // Keyboard support untuk kalkulator
         document.addEventListener('keydown', event => {
-            // Cegah aksi default untuk tombol yang digunakan
-            if (event.key.match(/[0-9\.\+\-\*\/=]|Backspace|Enter|Delete/)) {
-                event.preventDefault();
-            }
-            
-            // Angka
             if (event.key >= '0' && event.key <= '9') {
-                inputNumber(event.key);
-                updateDisplay();
-            }
-            
-            // Desimal
-            if (event.key === '.') {
-                inputDecimal();
-                updateDisplay();
-            }
-            
-            // Operator
-            if (event.key === '+') {
-                chooseOperator('+');
-                updateDisplay();
-            }
-            
-            if (event.key === '-') {
-                chooseOperator('-');
-                updateDisplay();
-            }
-            
-            if (event.key === '*') {
-                chooseOperator('×');
-                updateDisplay();
-            }
-            
-            if (event.key === '/') {
-                chooseOperator('÷');
-                updateDisplay();
-            }
-            
-            // Sama dengan atau Enter
-            if (event.key === '=' || event.key === 'Enter') {
-                performEquals();
-                updateDisplay();
-            }
-            
-            // Backspace (hapus)
-            if (event.key === 'Backspace') {
-                deleteLastDigit();
-                updateDisplay();
-            }
-            
-            // Delete atau Escape (clear)
-            if (event.key === 'Delete' || event.key === 'Escape') {
+                appendNumber(event.key);
+                updateCalculatorDisplay();
+            } else if (event.key === '.') {
+                appendDecimal();
+                updateCalculatorDisplay();
+            } else if (event.key === '+' || event.key === '-') {
+                chooseOperation(event.key);
+                updateCalculatorDisplay();
+            } else if (event.key === '*') {
+                chooseOperation('×');
+                updateCalculatorDisplay();
+            } else if (event.key === '/') {
+                event.preventDefault();
+                chooseOperation('÷');
+                updateCalculatorDisplay();
+            } else if (event.key === 'Enter' || event.key === '=') {
+                event.preventDefault();
+                if (previousOperand !== '' && operation !== null) {
+                    calculate();
+                    updateCalculatorDisplay();
+                }
+            } else if (event.key === 'Escape') {
                 clearCalculator();
-                updateDisplay();
+                updateCalculatorDisplay();
+            } else if (event.key === 'Backspace') {
+                event.preventDefault();
+                deleteNumber();
+                updateCalculatorDisplay();
             }
         });
         
-        // Inisialisasi tampilan
-        updateDisplay();
+        // ==============================
+        // KONVERTER MATA UANG
+        // ==============================
+        const fromAmount = document.getElementById('fromAmount');
+        const toAmount = document.getElementById('toAmount');
+        const fromCurrencySelect = document.getElementById('fromCurrencySelect');
+        const toCurrencySelect = document.getElementById('toCurrencySelect');
+        const fromCurrencyElement = document.getElementById('fromCurrency');
+        const toCurrencyElement = document.getElementById('toCurrency');
+        const fromCurrencyName = document.getElementById('fromCurrencyName');
+        const toCurrencyName = document.getElementById('toCurrencyName');
+        const fromFlag = document.getElementById('fromFlag');
+        const toFlag = document.getElementById('toFlag');
+        const exchangeRateElement = document.getElementById('exchangeRate');
+        const swapButton = document.getElementById('swapCurrencies');
+        const lastUpdatedElement = document.getElementById('lastUpdated');
+        
+        // Data mata uang dengan kurs tetap (untuk demo)
+        // Dalam aplikasi nyata, Anda akan menggunakan API seperti ExchangeRate-API
+        const currencyData = {
+            "USD": { name: "Dolar Amerika Serikat", rate: 1, flag: "🇺🇸" },
+            "EUR": { name: "Euro", rate: 0.92, flag: "🇪🇺" },
+            "GBP": { name: "Pound Sterling", rate: 0.79, flag: "🇬🇧" },
+            "JPY": { name: "Yen Jepang", rate: 150.5, flag: "🇯🇵" },
+            "IDR": { name: "Rupiah Indonesia", rate: 15500, flag: "🇮🇩" },
+            "SGD": { name: "Dolar Singapura", rate: 1.35, flag: "🇸🇬" },
+            "MYR": { name: "Ringgit Malaysia", rate: 4.75, flag: "🇲🇾" },
+            "CNY": { name: "Yuan China", rate: 7.25, flag: "🇨🇳" },
+            "AUD": { name: "Dolar Australia", rate: 1.52, flag: "🇦🇺" },
+            "KRW": { name: "Won Korea Selatan", rate: 1330, flag: "🇰🇷" }
+        };
+        
+        // Fungsi untuk mendapatkan nilai tukar
+        function getExchangeRate(fromCurrency, toCurrency) {
+            const fromRate = currencyData[fromCurrency].rate;
+            const toRate = currencyData[toCurrency].rate;
+            return toRate / fromRate;
+        }
+        
+        // Fungsi untuk mengkonversi mata uang
+        function convertCurrency() {
+            const fromCurrency = fromCurrencySelect.value;
+            const toCurrency = toCurrencySelect.value;
+            const amount = parseFloat(fromAmount.value) || 0;
+            
+            if (fromCurrency === toCurrency) {
+                toAmount.value = amount.toFixed(2);
+                exchangeRateElement.textContent = `1 ${fromCurrency} = 1 ${toCurrency}`;
+                return;
+            }
+            
+            const exchangeRate = getExchangeRate(fromCurrency, toCurrency);
+            const convertedAmount = amount * exchangeRate;
+            
+            // Format angka dengan pemisah ribuan
+            toAmount.value = formatNumber(convertedAmount, toCurrency);
+            
+            // Update tampilan nilai tukar
+            const reverseRate = 1 / exchangeRate;
+            exchangeRateElement.textContent = `1 ${fromCurrency} = ${formatNumber(exchangeRate, toCurrency)} ${toCurrency} | 1 ${toCurrency} = ${formatNumber(reverseRate, fromCurrency)} ${fromCurrency}`;
+            
+            // Update info mata uang
+            updateCurrencyInfo();
+        }
+        
+        // Format angka dengan pemisah ribuan
+        function formatNumber(number, currency) {
+            if (currency === 'JPY' || currency === 'KRW' || currency === 'IDR') {
+                return Math.round(number).toLocaleString('id-ID');
+            }
+            return number.toLocaleString('id-ID', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+        
+        // Update info mata uang
+        function updateCurrencyInfo() {
+            const fromCurrency = fromCurrencySelect.value;
+            const toCurrency = toCurrencySelect.value;
+            
+            // Update kode mata uang
+            fromCurrencyElement.textContent = fromCurrency;
+            toCurrencyElement.textContent = toCurrency;
+            
+            // Update nama mata uang
+            fromCurrencyName.textContent = currencyData[fromCurrency].name;
+            toCurrencyName.textContent = currencyData[toCurrency].name;
+            
+            // Update bendera
+            fromFlag.textContent = currencyData[fromCurrency].flag;
+            toFlag.textContent = currencyData[toCurrency].flag;
+        }
+        
+        // Fungsi untuk menukar mata uang
+        function swapCurrencies() {
+            const tempCurrency = fromCurrencySelect.value;
+            const tempAmount = fromAmount.value;
+            
+            fromCurrencySelect.value = toCurrencySelect.value;
+            toCurrencySelect.value = tempCurrency;
+            
+            // Pertukaran nilai jika ada
+            if (parseFloat(toAmount.value)) {
+                fromAmount.value = parseFloat(toAmount.value.replace(/\./g, '').replace(',', '.'));
+            }
+            
+            convertCurrency();
+        }
+        
+        // Fungsi untuk memperbarui tanggal terakhir
+        function updateLastUpdated() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            lastUpdatedElement.textContent = `Terakhir diperbarui: ${now.toLocaleDateString('id-ID', options)}`;
+        }
+        
+        // Event Listeners untuk konverter
+        fromAmount.addEventListener('input', convertCurrency);
+        fromCurrencySelect.addEventListener('change', convertCurrency);
+        toCurrencySelect.addEventListener('change', convertCurrency);
+        swapButton.addEventListener('click', swapCurrencies);
+        
+        // Fitur khusus: Gunakan hasil kalkulator di konverter
+        document.querySelector('[data-action="equals"]').addEventListener('click', () => {
+            // Setelah kalkulator menghitung, gunakan hasilnya di konverter
+            setTimeout(() => {
+                if (currentOperand !== '0' && !isNaN(parseFloat(currentOperand))) {
+                    fromAmount.value = parseFloat(currentOperand);
+                    convertCurrency();
+                }
+            }, 100);
+        });
+        
+        // Inisialisasi
+        updateCalculatorDisplay();
+        updateCurrencyInfo();
+        convertCurrency();
+        updateLastUpdated();
+        
+        // Update nilai tukar setiap 30 detik (simulasi)
+        setInterval(() => {
+            // Dalam aplikasi nyata, ini akan memanggil API
+            // Untuk demo, kita hanya update timestamp
+            updateLastUpdated();
+        }, 30000);
     </script>
 </body>
 </html>
